@@ -8,6 +8,11 @@ import os
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 
+# Route model downloads and caches to F drive to preserve C drive space
+os.environ.setdefault("TORCH_HOME", "F:/.cache/torch")
+os.environ.setdefault("HF_HOME", "F:/.cache/huggingface")
+os.environ.setdefault("YOLO_CONFIG_DIR", "F:/.cache/ultralytics")
+
 import tempfile
 import time
 from typing import Optional, Dict, Any, List
@@ -122,7 +127,10 @@ def main():
             "Upload Queue Video", type=["mp4", "avi", "mov", "mkv"]
         )
         if uploaded_file is not None:
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
+            # Store temporary upload on F drive to avoid filling C drive
+            f_temp_dir = os.path.join(os.path.dirname(__file__), "data", "temp")
+            os.makedirs(f_temp_dir, exist_ok=True)
+            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4", dir=f_temp_dir)
             temp_file.write(uploaded_file.read())
             temp_file_path = temp_file.name
             video_path = temp_file_path
