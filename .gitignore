@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+env/
+
+# Model weights
+*.pt
+*.onnx
+
+# Data & sample videos (large binary files)
+data/sample_videos/*.mp4
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
