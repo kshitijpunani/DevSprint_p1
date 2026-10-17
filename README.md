@@ -81,8 +81,14 @@ In Command Prompt:
 run.bat
 ```
 
-### Option B: Direct Streamlit Run
+### Option B: Direct Terminal Run
+With the virtual environment:
 ```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+Or activate the virtual environment first:
+```powershell
+.\.venv\Scripts\activate
 streamlit run app.py
 ```
 

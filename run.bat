@@ -7,4 +7,5 @@ set HF_HOME=F:\.cache\huggingface
 set YOLO_CONFIG_DIR=F:\.cache\ultralytics
 
 rem Run with dedicated virtual environment on F drive
-call ".\.venv\Scripts\streamlit.exe" run app.py
+call ".\.venv\Scripts\python.exe" -m streamlit run app.py
+if %ERRORLEVEL% neq 0 pause

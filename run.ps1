@@ -6,4 +6,4 @@ $env:HF_HOME = "F:\.cache\huggingface"
 $env:YOLO_CONFIG_DIR = "F:\.cache\ultralytics"
 
 # Run with dedicated virtual environment on F drive
-& ".\.venv\Scripts\streamlit.exe" run app.py
+& ".\.venv\Scripts\python.exe" -m streamlit run app.py

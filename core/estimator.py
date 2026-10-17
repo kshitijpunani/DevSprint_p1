@@ -16,7 +16,13 @@ class WaitingTimeEstimator:
     dwell times, queue lengths, service throughput, and predictive wait times.
     """
 
-    def __init__(self, default_service_sec: float = 45.0, alert_wait_min: float = 5.0, alert_queue_len: int = 8):
+    def __init__(
+        self,
+        default_service_sec: float = 45.0,
+        alert_wait_min: float = 5.0,
+        alert_queue_len: int = 8,
+        alert_cooldown_sec: float = 25.0,
+    ):
         """
         Initialize the estimator.
 
@@ -24,10 +30,12 @@ class WaitingTimeEstimator:
             default_service_sec: Estimated time in seconds to serve one customer (baseline).
             alert_wait_min: Threshold in minutes above which to trigger a bottleneck alert.
             alert_queue_len: Threshold in queue count above which to trigger an alert.
+            alert_cooldown_sec: Minimum seconds between logged alert occurrences (default: 25.0).
         """
         self.default_service_sec = max(5.0, float(default_service_sec))
         self.alert_wait_min = alert_wait_min
         self.alert_queue_len = alert_queue_len
+        self.alert_cooldown_sec = max(5.0, float(alert_cooldown_sec))
 
         # Completed customers tracking
         self.served_count = 0
@@ -134,8 +142,8 @@ class WaitingTimeEstimator:
         is_alert = False
         if (est_wait_sec / 60.0 >= self.alert_wait_min) or (queue_len >= self.alert_queue_len):
             is_alert = True
-            # Log alert every 15s to avoid duplicate spam
-            if not self.alerts or (current_time - self.alerts[-1]["timestamp"] > 15.0):
+            # Log alert every 25s to avoid duplicate spam
+            if not self.alerts or (current_time - self.alerts[-1]["timestamp"] > self.alert_cooldown_sec):
                 self.alerts.append({
                     "timestamp": current_time,
                     "time_str": self.format_time(current_time),
